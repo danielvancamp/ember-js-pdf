@@ -83,7 +83,7 @@ const JsPdfComponent = Component.extend({
    */
   content: computed('steps.[]', 'orientation', 'unit', 'format', 'compressPdf', {
     get() {
-      const {
+      let {
         orientation,
         unit,
         format,
@@ -93,6 +93,11 @@ const JsPdfComponent = Component.extend({
       assert('{{js-pdf}} requires a valid PDF `orientation`', typeof orientation === 'string' && orientation.length);
       assert('{{js-pdf}} requires a measurment as `unit`', typeof unit === 'string' && unit.length);
       assert('{{js-pdf}} requires a valid page `format`', typeof format === 'string' && format.length);
+
+      if(format.includes('[')){
+          let array = JSON.parse(format);
+          format = array;
+      }
 
       return new jsPDF(orientation, unit, format, compressPdf);
     },
